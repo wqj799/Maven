@@ -6,10 +6,6 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
 
 # clean
 
-## 类型
-
-编译时插件
-
 ## 描述
 
 当想要删除项目目录中构建时生成的文件时，可以使用Clean插件。
@@ -148,10 +144,6 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
 
 # compiler
 
-## 类型
-
-编译时插件
-
 ## 描述
 
 用于编译项目的源代码。从3.0开始默认编译器是`javax.tools.JavaCompiler`。
@@ -217,10 +209,6 @@ mvn test-compile
 - compilerId：指定其它的编译器。
 
 # deploy
-
-## 类型
-
-编译时插件
 
 ## 描述
 
@@ -420,10 +408,6 @@ mvn deploy
 
 # failsafe
 
-## 类型
-
-编译时插件
-
 ## 描述
 
 用于Maven生命周期的集成测试和验证阶段。在集成测试阶段不会使构建失败，从而后续阶段能够执行。
@@ -575,10 +559,6 @@ mvn verify
 
 # install
 
-## 类型
-
-编译时插件
-
 ## 描述
 
 在安装阶段使用该插件将工件添加到本地存储库。
@@ -650,24 +630,65 @@ mvn install:install-file -Dfile=your-artifact-1.0.jar \
 
 # resources
 
-## 类型
-
-
-
 ## 描述
 
-
+将项目资源复制到输出目录。分为main资源和test资源。
 
 ## 目标
 
+- resources:resources
+  
+  将`<resources>`元素指定的main源代码的资源复制到输出目录，将不会影响测试代码的资源。
 
+- resources:copy-resources
+  
+  将不在maven标准资源目录中或未在buid/resources元素中声明的资源输出到目录。
+
+- resources:testResources
+  
+  将`<testResources>`元素指定的测试资源复制到输出目录。
 
 ## 依赖信息
 
-
+```xml
+<project>
+  ...
+  <build>
+    <!-- To define the plugin version in your parent POM -->
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+        ...
+      </plugins>
+    </pluginManagement>
+    <!-- To use the plugin goals in your POM or parent POM -->
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.2.0</version>
+      </plugin>
+      ...
+    </plugins>
+  </build>
+  ...
+</project>
+```
 
 ## 使用方法
 
-
+```shell
+mvn resources:resources
+```
 
 ## 配置
+
+# site
+
+## 描述
+
+用于为项目生成站点。生成的站点还包括在POM中配置的项目报告。
