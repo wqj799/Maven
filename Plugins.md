@@ -6,141 +6,35 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
 
 # clean
 
-## 描述
-
-当想要删除项目目录中构建时生成的文件时，可以使用Clean插件。
-
 ## 目标
 
 - clean:clean
   
-  尝试清理在构建时工作目录中生成的的文件。默认情况下，它会查找并删除由以下属性配置的工作目录：
-  
-  1. project.build.directory
-  
-  2. project.build.outputDirectory
-  
-  3. project.build.testOutputDirectory
-  
-  4. project.reporting.outputDirectory
-
-## 依赖信息
-
-```xml
-<project>
-  ...
-  <build>
-    <!-- To define the plugin version in your parent POM -->
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.2.0</version>
-        </plugin>
-        ...
-      </plugins>
-    </pluginManagement>
-    <!-- To use the plugin goals in your POM or parent POM -->
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.2.0</version>
-      </plugin>
-      ...
-    </plugins>
-  </build>
-  ...
-</project>
-  [...]
-</project>
-```
-
-## 配置
-
-- 删除额外的目录
-  
-  clean插件默认删除target目录，可以通过以下配置删除或保留额外的目录：
-  
-  ```xml
-  <build>
-    [...]
-    <plugin>
-      <artifactId>maven-clean-plugin</artifactId>
-      <version>3.1.0</version>
-      <configuration>
-        <filesets>
-          <fileset>
-            <directory>some/relative/path</directory>
-            <includes>
-              <include>**/*.tmp</include>
-              <include>**/*.log</include>
-            </includes>
-            <excludes>
-              <exclude>**/important.log</exclude>
-              <exclude>**/another-important.log</exclude>
-            </excludes>
-            <followSymlinks>false</followSymlinks>
-          </fileset>
-        </filesets>
-      </configuration>
-    </plugin>
-    [...]
-  </build>
-  ```
-  
-  **directory参数中使用相对路径**
-
-- 跳过测试：
-  
-  设置参数skip为true跳过测试。
-  
-  - 使用命令行：
+  - 版本信息
     
-    ```shell
-    mvn clean -Dmaven.clean.skip=true
-    ```
+    `org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean`
   
-  - 在pom.xml中配置：
+  - 描述
     
-    ```xml
-    <build>
-      [...]
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-          <configuration>
-            <skip>true</skip>
-          </configuration>
-        </plugin>
-      [...]
-    </build>
-    ```
-
-- 忽略清理时产生的错误信息：
+    尝试清理在构建时工作目录中生成的的文件。默认情况下，它会查找并删除由以下属性配置的工作目录：
+    
+    1. project.build.directory
+    
+    2- project.build.outputDirectory
+    
+    3- project.build.testOutputDirectory
+    
+    4- project.reporting.outputDirectory
+    
+    通过`filesets`标签可以清理默认值以外的文件。
   
-  - 使用命令行：
+  - 参数
     
-    ```shell
-    mvn clean -Dmaven.clean.failOnError=false
-    ```
-  
-  - 在pom.xml中配置：
+    | 参数名                           | 类型      | 描述                                                |
+    | ----------------------------- | ------- | ------------------------------------------------- |
+    | `<excludeDefaultDirectories>` | boolean | 禁止清理默认的输出目录。如果设置为true，则只能清理使用`<filesets>`标签配置的目录。 |
     
-    ```xml
-    <build>
-      [...]
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-          <configuration>
-            <failOnError>false</failOnError>
-          </configuration>
-        </plugin>
-      [...]
-    </build>
-    ```
+    
 
 # compiler
 
@@ -691,4 +585,32 @@ mvn resources:resources
 
 ## 描述
 
-用于为项目生成站点。生成的站点还包括在POM中配置的项目报告。
+用于为项目生成站点。
+
+## 目标
+
+- site:attach-descriptor
+  
+  - 全名：
+    
+    `org.apache.maven.plugins:maven-site-plugin:3.11.0:attach-descriptor`
+  
+  - 描述：
+    
+    将站点描述符文件（site.xml）添加到要安装/部署的文件列表中。**该操作已经从Maven 3.x的默认生命周期中删除了。**
+  
+  - 可选参数：
+    
+    | 参数名                           | 类型      | 描述                                         |
+    | ----------------------------- | ------- | ------------------------------------------ |
+    | `<locales>`                   | String  | 使用逗号分隔的语言列表。默认值为：en                        |
+    | `<pomPackagingOnly>`          | boolean | 仅打包为pom时才附加站点描述符文件（site.xml）。默认为true       |
+    | `<relativizeDecorationLinks>` | boolean | 在站点描述符中创建相对于项目URL的链接。默认为true               |
+    | `<siteDirectory>`             | File    | 包含site.xml文件和源代码的目录。默认是${basedir}/src/site |
+    | `<skip>`                      | boolean | 设置为true将跳过站点生成。默认为false                    |
+
+- site:deploy
+  
+  - 全名：
+    
+    `org.apache.maven.plugins:maven-site-plugin:3.11.0:deploy`
