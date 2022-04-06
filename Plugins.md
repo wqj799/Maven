@@ -20,19 +20,101 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
     
     1. project.build.directory
     
-    2- project.build.outputDirectory
+    2. project.build.outputDirectory
     
-    3- project.build.testOutputDirectory
+    3. project.build.testOutputDirectory
     
-    4- project.reporting.outputDirectory
+    4. project.reporting.outputDirectory
     
     通过`filesets`标签可以清理默认值以外的文件。
   
   - 参数
     
-    | 参数名                           | 类型      | 描述                                                |
-    | ----------------------------- | ------- | ------------------------------------------------- |
-    | `<excludeDefaultDirectories>` | boolean | 禁止清理默认的输出目录。如果设置为true，则只能清理使用`<filesets>`标签配置的目录。 |
+    1. `<excludeDefaultDirectories>`
+       
+       - 类型
+         
+         boolean
+       
+       - 描述
+         
+         禁止清理默认的输出目录。如果设置为true，则只能清理使用`<filesets>`标签配置的目录。
+         
+         默认为false。
+    
+    2. `<failOnError>`
+       
+       - 类型
+         
+         boolean
+       
+       - 描述
+         
+         当清理时出现错误是否继续执行。
+         
+         默认为true。
+    
+    3. `<fast>`
+       
+       - 类型
+         
+         boolean
+       
+       - 描述
+         
+         是否启用快速清理。当为true时，则插件在执行时，将自动把要清理的目录移动到maven.clean.fastDir目录中，并启动一个线程在后台清理该目录。构建完成后，maven会等待此线程清理结束。如果在移动过程中出现错误，则插件将使用默认的传统清理机制。
+         
+         默认为false。
+    
+    4. `<fastDir>`
+       
+       - 类型
+         
+         File
+       
+       - 描述
+         
+         当指定`<fast>`标签为true时，此属性将指定移动的位置。如果未指定，将使用`${maven.multiModuleProjectDirectory}/target/.clean`目录。如果`${build.directory}`已被修改，则必须明确调整此属性。
+    
+    5. `<fastMode>`
+       
+       - 类型
+         
+         String
+       
+       - 描述
+         
+         使用快速清理时的模式：值为background时，立即开始清理操作并在会话结束时等待清理操作完成。值为at-end时，表示会话结束时应该同步执行清理操作。值为defer时，表示会话结束时应该在后台启动清理操作。
+         
+         默认值为background。
+    
+    6. `<filesets>`
+       
+       - 类型
+         
+         Fileset[]
+       
+       - 描述
+         
+         除默认目录外，需要被清理的文件列表。
+         
+         ```xml
+         <filesets>
+           <fileset>
+             <directory>src/main/generated</directory>
+             <followSymlinks>false</followSymlinks>
+             <useDefaultExcludes>true</useDefaultExcludes>
+             <includes>
+               <include>*.java</include>
+             </includes>
+             <excludes>
+               <exclude>Template*</exclude>
+             </excludes>
+           </fileset>
+         </filesets>
+         ```
+         
+         
     
     
 
