@@ -6,8 +6,6 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
 
 # clean
 
-## 目标
-
 - clean:clean
   
   - 版本信息
@@ -30,159 +28,64 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
   
   - 参数
     
-    1. `<excludeDefaultDirectories>`
-       
-       - 类型
-         
-         boolean
-       
-       - 描述
-         
-         禁止清理默认的输出目录。如果设置为true，则只能清理使用`<filesets>`标签配置的目录。
-         
-         默认为false。
+    | 参数名                       | 类型        | 描述                                                                                                                                             |
+    | ------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+    | excludeDefaultDirectories | boolean   | 禁止清理默认的输出目录。如果设置为true，则只能清理使用`<filesets>`标签配置的目录。<br/>默认为false。                                                                                |
+    | failOnError               | boolean   | 当清理时出现错误是否继续执行。<br/>默认为true。                                                                                                                   |
+    | fast                      | boolean   | 是否启用快速清理。当为true时，则插件在执行时，将自动把要清理的目录移动到maven.clean.fastDir目录中，并启动一个线程在后台清理该目录。构建完成后，maven会等待此线程清理结束。如果在移动过程中出现错误，则插件将使用默认的传统清理机制。<br/>默认为false。 |
+    | fastDir                   | File      | 当指定`<fast>`标签为true时，此属性将指定移动的位置。如果未指定，将使用`${maven.multiModuleProjectDirectory}/target/.clean`目录。如果`${build.directory}`已被修改，则必须明确调整此属性。         |
+    | fastMode                  | String    | 使用快速清理时的模式：值为background时，立即开始清理操作并在会话结束时等待清理操作完成。值为at-end时，表示会话结束时应该同步执行清理操作。值为defer时，表示会话结束时应该在后台启动清理操作。<br/>默认为background。                   |
+    | filesets                  | Fileset[] | 除默认目录外，需要被清理的文件列表。使用方法参考※注1                                                                                                                    |
+    | followSymLinks            | boolean   | 设置插件从默认输出目录中删除文件使用应遵循符号链接。<br/>默认为false。                                                                                                       |
+    | retryOnError              | boolean   | 删除文件失败后是否进行重试。<br/>默认为true。                                                                                                                    |
+    | skip                      | boolean   | 是否跳过执行此插件。<br/>默认为false。                                                                                                                       |
+    | verbose                   | boolean   | 设置是否已详细模式运行此插件。                                                                                                                                |
     
-    2. `<failOnError>`
-       
-       - 类型
-         
-         boolean
-       
-       - 描述
-         
-         当清理时出现错误是否继续执行。
-         
-         默认为true。
+    **※注1**
     
-    3. `<fast>`
-       
-       - 类型
-         
-         boolean
-       
-       - 描述
-         
-         是否启用快速清理。当为true时，则插件在执行时，将自动把要清理的目录移动到maven.clean.fastDir目录中，并启动一个线程在后台清理该目录。构建完成后，maven会等待此线程清理结束。如果在移动过程中出现错误，则插件将使用默认的传统清理机制。
-         
-         默认为false。
-    
-    4. `<fastDir>`
-       
-       - 类型
-         
-         File
-       
-       - 描述
-         
-         当指定`<fast>`标签为true时，此属性将指定移动的位置。如果未指定，将使用`${maven.multiModuleProjectDirectory}/target/.clean`目录。如果`${build.directory}`已被修改，则必须明确调整此属性。
-    
-    5. `<fastMode>`
-       
-       - 类型
-         
-         String
-       
-       - 描述
-         
-         使用快速清理时的模式：值为background时，立即开始清理操作并在会话结束时等待清理操作完成。值为at-end时，表示会话结束时应该同步执行清理操作。值为defer时，表示会话结束时应该在后台启动清理操作。
-         
-         默认值为background。
-    
-    6. `<filesets>`
-       
-       - 类型
-         
-         Fileset[]
-       
-       - 描述
-         
-         除默认目录外，需要被清理的文件列表。
-         
-         ```xml
-         <filesets>
-           <fileset>
-             <directory>src/main/generated</directory>
-             <followSymlinks>false</followSymlinks>
-             <useDefaultExcludes>true</useDefaultExcludes>
-             <includes>
-               <include>*.java</include>
-             </includes>
-             <excludes>
-               <exclude>Template*</exclude>
-             </excludes>
-           </fileset>
-         </filesets>
-         ```
-         
-         
-    
-    
+    ```xml
+    <filesets>
+      <fileset>
+        <directory>src/main/generated</directory>
+        <followSymlinks>false</followSymlinks>
+        <useDefaultExcludes>true</useDefaultExcludes>
+        <includes>
+          <include>*.java</include>
+        </includes>
+        <excludes>
+          <exclude>Template*</exclude>
+        </excludes>
+      </fileset>
+    </filesets>
+    ```
 
 # compiler
 
-## 描述
-
-用于编译项目的源代码。从3.0开始默认编译器是`javax.tools.JavaCompiler`。
-
-## 目标
-
 - compiler:compile
   
-  Maven生命周期中的compile阶段，用于编译源文件。
+  - 版本信息：
+    
+    `org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile`
+  
+  - 描述
+    
+    编译源代码。
+  
+  - 参数
+    
+    | 参数名                  | 类型   | 描述  |
+    | -------------------- | ---- | --- |
+    | annotationProcessors | List |     |
+    |                      |      |     |
+    |                      |      |     |
+    |                      |      |     |
+    |                      |      |     |
 
 - compiler:testCompile
   
   Maven生命周期中的test-compile阶段，用于编译测试文件。
 
-## 依赖信息
 
-```xml
-<project>
-  ...
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.10.1</version>
-          <configuration>
-            <!-- put your configurations here -->
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  ...
-</project>
-```
-
-**从Maven3.0开始不指定插件版本号将发出警告。**
-
-## 使用方法
-
-```shell
-mvn compile
-mvn test-compile
-```
-
-## 配置
-
-- compilerVersion：用于指定插件将使用的编译器版本。需要同时将fork参数设置为true。
-
-- executable：指定javac的路径。
-
-- source，target：将项目编译为与当前使用的版本不同的版本。source用于说明编写源代码时JDK的版本，target用于说明源代码编译后JDK的版本。
-  
-  **注意：仅设置target参数并不能保证代码运行在指定版本的JRE上**
-
-- release：从JDK9开始，javac可以接受release参数来指定要使用哪个JDK版本构建项目。**该参数可以确保按照指定的JDK版本编译代码。**
-
-- meminitial，maxmem：设置初始内存大小和最大内存使用量。
-
-- compilerArgs：将参数传递给javac编译器。
-
-- compilerId：指定其它的编译器。
 
 # deploy
 
