@@ -73,19 +73,45 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
   
   - 参数
     
-    | 参数名                  | 类型   | 描述  |
-    | -------------------- | ---- | --- |
-    | annotationProcessors | List |     |
-    |                      |      |     |
-    |                      |      |     |
-    |                      |      |     |
-    |                      |      |     |
+    | 参数名                      | 类型       | 描述                                                                                                                                |
+    | ------------------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+    | annotationProcessorPaths | List     | 指定注解处理器的类路径。如果不指定，则使用默认的注解处理器类路径。参考※注2                                                                                            |
+    | annotationProcessors     | String[] | 要运行的注解处理器的名称。                                                                                                                     |
+    | compilerArgs             | List     | 设置要传递给编译器的参数。**注意仅当 fork 设置为 true 时才会传递 -J 选项。** 参考※注3                                                                            |
+    | compilerArgument         | String   | 设置要传递给编译器的未格式化的单个字符串参数。要传递多个参数，如-Xmaxerrs 1000（这里实际是两个参数），必须使用compilerArgs。**注意仅当 fork 设置为 true 时才会传递 -J 选项。**                    |
+    | compilerId               | String   | 要使用的编译器的ID。<br/>默认为javac                                                                                                          |
+    | compilerReuseStrategy    | String   | 复用javac类的策略：<br/>reuseCreate（默认）：多线程构建的情况下，每个线程将有单独的实例。<br/>reuseSame：多线程构建下，每次编译都将使用相同的javac类。<br/>alwaysNew：每次编译都会创建一个新的javac类。 |
+    |                          |          |                                                                                                                                   |
+    
+    **※注2**
+    
+    ```xml
+    <configuration>
+      <annotationProcessorPaths>
+        <path>
+          <groupId>org.sample</groupId>
+          <artifactId>sample-annotation-processor</artifactId>
+          <version>1.2.3</version>
+        </path>
+        <!-- ... more ... -->
+      </annotationProcessorPaths>
+    </configuration>
+    ```
+    
+    **※注3**
+    
+    ```xml
+    <compilerArgs>
+      <arg>-Xmaxerrs</arg>
+      <arg>1000</arg>
+      <arg>-Xlint</arg>
+      <arg>-J-Duser.language=en_us</arg>
+    </compilerArgs>
+    ```
 
 - compiler:testCompile
   
   Maven生命周期中的test-compile阶段，用于编译测试文件。
-
-
 
 # deploy
 
