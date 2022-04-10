@@ -28,18 +28,18 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
   
   - 参数
     
-    | 参数名                       | 类型        | 描述                                                                                                                                             |
-    | ------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-    | excludeDefaultDirectories | boolean   | 禁止清理默认的输出目录。如果设置为true，则只能清理使用`<filesets>`标签配置的目录。<br/>默认为false。                                                                                |
-    | failOnError               | boolean   | 当清理时出现错误是否继续执行。<br/>默认为true。                                                                                                                   |
-    | fast                      | boolean   | 是否启用快速清理。当为true时，则插件在执行时，将自动把要清理的目录移动到maven.clean.fastDir目录中，并启动一个线程在后台清理该目录。构建完成后，maven会等待此线程清理结束。如果在移动过程中出现错误，则插件将使用默认的传统清理机制。<br/>默认为false。 |
-    | fastDir                   | File      | 当指定`<fast>`标签为true时，此属性将指定移动的位置。如果未指定，将使用`${maven.multiModuleProjectDirectory}/target/.clean`目录。如果`${build.directory}`已被修改，则必须明确调整此属性。         |
-    | fastMode                  | String    | 使用快速清理时的模式：值为background时，立即开始清理操作并在会话结束时等待清理操作完成。值为at-end时，表示会话结束时应该同步执行清理操作。值为defer时，表示会话结束时应该在后台启动清理操作。<br/>默认为background。                   |
-    | filesets                  | Fileset[] | 除默认目录外，需要被清理的文件列表。使用方法参考※注1                                                                                                                    |
-    | followSymLinks            | boolean   | 设置插件从默认输出目录中删除文件使用应遵循符号链接。<br/>默认为false。                                                                                                       |
-    | retryOnError              | boolean   | 删除文件失败后是否进行重试。<br/>默认为true。                                                                                                                    |
-    | skip                      | boolean   | 是否跳过执行此插件。<br/>默认为false。                                                                                                                       |
-    | verbose                   | boolean   | 设置是否已详细模式运行此插件。                                                                                                                                |
+    | 参数名                       | 类型        | 最低版本  | 描述                                                                                                                                             |
+    | ------------------------- | --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+    | excludeDefaultDirectories | boolean   | 2.3   | 禁止清理默认的输出目录。如果设置为true，则只能清理使用`<filesets>`标签配置的目录。<br/>默认为false。                                                                                |
+    | failOnError               | boolean   | 2.2   | 当清理时出现错误是否继续执行。<br/>默认为true。                                                                                                                   |
+    | fast                      | boolean   | 3.2   | 是否启用快速清理。当为true时，则插件在执行时，将自动把要清理的目录移动到maven.clean.fastDir目录中，并启动一个线程在后台清理该目录。构建完成后，maven会等待此线程清理结束。如果在移动过程中出现错误，则插件将使用默认的传统清理机制。<br/>默认为false。 |
+    | fastDir                   | File      | 3.2   | 当指定`<fast>`标签为true时，此属性将指定移动的位置。如果未指定，将使用`${maven.multiModuleProjectDirectory}/target/.clean`目录。如果`${build.directory}`已被修改，则必须明确调整此属性。         |
+    | fastMode                  | String    | 3.2   | 使用快速清理时的模式：值为background时，立即开始清理操作并在会话结束时等待清理操作完成。值为at-end时，表示会话结束时应该同步执行清理操作。值为defer时，表示会话结束时应该在后台启动清理操作。<br/>默认为background。                   |
+    | filesets                  | Fileset[] | 2.1   | 除默认目录外，需要被清理的文件列表。使用方法参考※注1                                                                                                                    |
+    | followSymLinks            | boolean   | 2.1   | 设置插件从默认输出目录中删除文件使用应遵循符号链接。<br/>默认为false。                                                                                                       |
+    | retryOnError              | boolean   | 2.4.2 | 删除文件失败后是否进行重试。<br/>默认为true。                                                                                                                    |
+    | skip                      | boolean   | 2.2   | 是否跳过执行此插件。<br/>默认为false。                                                                                                                       |
+    | verbose                   | boolean   | 2.1   | 设置是否已详细模式运行此插件。                                                                                                                                |
     
     **※注1**
     
@@ -161,356 +161,87 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
 
 - compiler:testCompile
   
-  Maven生命周期中的test-compile阶段，用于编译测试文件。
+  [Apache Maven Compiler Plugin – compiler:testCompile](https://maven.apache.org/plugins/maven-compiler-plugin/testCompile-mojo.html)
 
 # deploy
 
-## 描述
-
-将工件部署到远端存储库。
-
-## 目标
-
 - deploy:deploy
   
-  Maven生命周期中的deploy阶段，将工件部署到远端仓库。
+  - 版本信息
+    
+    `org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M2:deploy`
+  
+  - 描述
+    
+    将工件部署到远程存储库。
+  
+  - 参数
+    
+    | 参数名                             | 类型      | 最低版本 | 描述                                                                                                                                                                |
+    | ------------------------------- | ------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | altDeploymentRepository         | String  | -    | 指定项目工件应部署到的替代存储库（除了在 distributionManagement 中指定的存储库）。<br/>格式：`id::url`<br/>id<br/>该 ID 可用于从 settings.xml 中获取正确的凭据<br/>url<br/>存储库的位置                              |
+    | altReleaseDeploymentRepository  | String  | 2.8  | 当项目有最终版本时使用的替代存储库。                                                                                                                                                |
+    | altSnapshotDeploymentRepository | String  | 2.8  | 当项目具有快照版本时使用的替代存储库。                                                                                                                                               |
+    | deployAtEnd                     | boolean | 2.8  | 每个项目是否应该在其自己的部署阶段或多模块构建结束时进行部署。 如果设置为 true 并且构建失败，则不会部署任何项目。                                                                                                      |
+    | retryFailedDeploymentCount      | int     | 2.7  | 用于控制失败部署在放弃和失败之前重试多少次的参数。                                                                                                                                         |
+    | skip                            | String  | 2.4  | 将此设置为 'true' 以绕过工件部署。自 3.0.0-M2 以来，它不再是一个布尔值，因为它可以有两个以上的值：
+<br/>true：会像往常一样跳过
+<br/>release：如果项目的当前版本是发布，则将跳过
+<br/>snapshots：如果项目的当前版本是快照，将跳过
+<br/>任何其他值将被视为false。 |
 
 - deploy:deploy-file
   
-  将工件安装到远端仓库。
-
-## 依赖库信息
-
-```xml
-<project>
-  ...
-  <build>
-    <!-- To define the plugin version in your parent POM -->
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.0.0-M2</version>
-        </plugin>
-        ...
-      </plugins>
-    </pluginManagement>
-    <!-- To use the plugin goals in your POM or parent POM -->
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>3.0.0-M2</version>
-      </plugin>
-      ...
-    </plugins>
-  </build>
-  ...
-</project>
-```
-
-## 使用方法
-
-```shell
-mvn deploy
-```
-
-## 配置
-
-- 部署工件
+  - 版本信息
+    
+    `org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M2:deploy-file`
   
-  要将工件部署到远端仓库需要提供`<distributionManagement/>`参数，该参数提供了一个`<repository/>`参数定义了工件的远端存储库的位置。如下所示：
+  - 描述
+    
+    在远程存储库中部署工件。
   
-  ```xml
-  [...]
-    <distributionManagement>
-      <repository>
-        <id>internal.repo</id>
-        <name>MyCo Internal Repository</name>
-        <url>Host to Company Repository</url>
-      </repository>
-    </distributionManagement>
-  [...]
-  ```
+  - 必须参数
+    
+    | 参数名          | 类型     | 最低版本 | 描述                                                                 |
+    | ------------ | ------ | ---- | ------------------------------------------------------------------ |
+    | file         | File   | -    | 将要部署的文件。                                                           |
+    | repositoryId | String | -    | server ID 映射到 settings.xml 的 <server> 部分下的 <id> 。                  |
+    | url          | String | -    | 将部署工件的 URL。<br/>如：file:///C:/m2-repo 或 scp://host.com/path/to/repo |
   
-  若要将快照工件和发布工件分开，可以指定`<snapshotRepository/>`单独定义快照工件的远程存储库位置。要部署项目网站，可以指定`<site/>`参数。
-  
-  如果远端存储库需要身份验证，则需要在`settings.xml`文件中使用`<server/>`参数提供身份验证信息。该参数中的`<id/>`元素匹配`<repository/>`的`<id/>`元素。`settings.xml`文件的配置如下所示：
-  
-  ```xml
-  [...]
-      <server>
-        <id>internal.repo</id>
-        <username>maven</username>
-        <password>foobar</password>
-      </server>
-  [...]
-  ```
-  
-  要发布的工件不是由Maven构建的情况下可以使用以下方式部署到远端仓库：
-  
-  ```shell
-  mvn deploy:deploy-file -Durl=file://C:\m2-repo \
-                         -DrepositoryId=some.id \
-                         -Dfile=your-artifact-1.0.jar \
-                         [-DpomFile=your-pom.xml] \
-                         [-DgroupId=org.some.group] \
-                         [-DartifactId=your-artifact] \
-                         [-Dversion=1.0] \
-                         [-Dpackaging=jar] \
-                         [-Dclassifier=test] \
-                         [-DgeneratePom=true] \
-                         [-DgeneratePom.description="My Project Description"] \
-                         [-DrepositoryLayout=legacy]
-  ```
-
-- 使用FTP部署构建
-  
-  在pom.xml中配置使用FTP服务器。
-  
-  ```xml
-  <project>
-    ...
-    <distributionManagement>
-      <repository>
-        <id>ftp-repository</id>
-        <url>ftp://repository.mycompany.com/repository</url>
-      </repository>
-    </distributionManagement>
-  
-    <build>
-      <extensions>
-        <!-- Enabling the use of FTP -->
-        <extension>
-          <groupId>org.apache.maven.wagon</groupId>
-           <artifactId>wagon-ftp</artifactId>
-           <version>1.0-beta-6</version>
-        </extension>
-      </extensions>
-    </build>
-    ...
-  </project>
-  ```
-  
-  在settings.xml中配置FTP需要的身份验证信息：
-  
-  ```xml
-  <settings>
-    ...
-    <servers>
-      <server>
-        <id>ftp-repository</id>
-        <username>user</username>
-        <password>pass</password>
-      </server>
-    </servers>
-    ...
-  </settings>
-  ```
-
-- 使用SSH部署构建
-  
-  在pom.xml中配置使用SSH服务器。
-  
-  ```xml
-  <project>
-    ...
-    <distributionManagement>
-      <repository>
-        <id>ssh-repository</id>
-        <url>scpexe://repository.mycompany.com/repository</url>
-      </repository>
-    </distributionManagement>
-  
-    <build>
-      <extensions>
-        <!-- Enabling the use of SSH -->
-        <extension>
-          <groupId>org.apache.maven.wagon</groupId>
-           <artifactId>wagon-ssh-external</artifactId>
-           <version>1.0-beta-6</version>
-        </extension>
-      </extensions>
-    </build>
-    ..
-  </project>
-  ```
-  
-  如果在Unix中部署或是安装了Cygwin，则不需要在settings.xml中进行配置，所有的内容都将从环境变量中获取。
-
-- 配置失败后多次部署
-  
-  通过使用`<retryFailedDeploymentCount/>`参数配置部署失败后重试次数。
-  
-  ```xml
-  <project>
-    [...]
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <configuration>
-            <retryFailedDeploymentCount>3</retryFailedDeploymentCount>
-          <configuration>
-        </plugin>
-      </plugins>
-    </build>
-    [...]
-  </project>
-  ```
+  - 可选参数
+    
+    | 参数名                        | 类型      | 最低版本 | 描述                                                                             |
+    | -------------------------- | ------- | ---- | ------------------------------------------------------------------------------ |
+    | artifactId                 | String  | -    | 要部署的工件的 artifactId。                                                            |
+    | classifier                 | String  | -    | 将classifier添加到工件。                                                              |
+    | classifiers                | String  | -    | 一个逗号分隔的分类器列表，用于部署每个额外的工件。                                                      |
+    | description                | String  | -    | 传递给生成的POM文件的描述。                                                                |
+    | files                      | String  | -    | 每个要部署的额外辅助工件的逗号分隔文件列表。 如果类型或分类器中的条目数不匹配，则会引发错误。                                |
+    | generatePom                | boolean | -    | 上传此工件的 POM。 如果没有提供 pom File 参数，将生成默认 POM。                                      |
+    | groupId                    | String  | -    | 要部署的工件的 GroupId。 如果指定，则从 POM 文件中检索。                                            |
+    | javadoc                    | File    | 2.6  | 工件的 API 文档。                                                                    |
+    | packaging                  | String  | -    | 要部署的工件的类型。 如果指定了 POM 文件，则从 POM 文件的 packaging元素中检索。 如果未通过命令行或 POM 指定，则默认为文件扩展名。 |
+    | pomFile                    | File    | -    | 与主要工件一起部署的现有 POM 文件的位置，由 ${file} 参数给出。                                         |
+    | retryFailedDeploymentCount | int     | 2.7  | 用于控制部署失败在放弃和失败之前重试多少次的参数。                                                      |
+    | sources                    | File    | 2.6  | 工件的源代码。                                                                        |
+    | types                      | String  | -    | 每个要部署的额外辅助工件的类型的逗号分隔列表。 如果文件或分类器中的条目数不匹配，则会引发错误。                               |
+    | version                    | String  | -    | 要部署的工件的版本。 如果指定，则从 POM 文件中检索。                                                  |
+    
+    
 
 # failsafe
 
-## 描述
-
-用于Maven生命周期的集成测试和验证阶段。在集成测试阶段不会使构建失败，从而后续阶段能够执行。
-
-集成测试包含四个阶段：
-
-- pre-integration-test：设置集成测试环境
-
-- integration-test：运行集成测试
-
-- post-integration-test：拆除集成测试环境
-
-- verify：检查集成测试结果
-
-## 目标
-
-- failsafe:integration-test
+- failsafe:verity
   
-  运行集成测试。
-
-- failsafe:verify
+  - 版本信息
+    
+    `org.apache.maven.plugins:maven-failsafe-plugin:3.0.0-M6:verify`
   
-  验证集成测试是否通过。
-
-## 依赖信息
-
-```xml
-<dependency>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-failsafe-plugin</artifactId>
-  <version>3.0.0-M6</version>
-</dependency>
-```
-
-## 使用方法
-
-```shell
-mvn verify
-```
-
-## 配置
-
-- 要使用此插件需要在pom.xml中如下配置：
+  - 描述
   
-  ```xml
-  <project>
-    [...]
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>3.0.0-M6</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>integration-test</goal>
-                <goal>verify</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </build>
-    [...]
-  </project>
-  ```
-
-- 将jetty和failsafe插件集成：
+  - 
   
-  需要将 jetty:start、jetty:run、jetty:run-exploded 或 jetty:run-war 之一绑定到 pre-integration-test 阶段，并将守护进程设置为 true，
-  
-  将 failsafe:integration-test 绑定到 integration-test 阶段，
-  
-  将 jetty:stop 绑定到 post-integration-test 阶段，
-  
-  最后将 failsafe:verify 绑定到 verify 阶段。
-  
-  ```xml
-  <project>
-    [...]
-    <build>
-      [...]
-      <plugins>
-        [...]
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>3.0.0-M6</version>
-          <executions>
-            <execution>
-              <id>integration-test</id>
-              <goals>
-                <goal>integration-test</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>verify</id>
-              <goals>
-                <goal>verify</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.eclipse.jetty</groupId>
-          <artifactId>jetty-maven-plugin</artifactId>
-          <version>9.2.2.v20140723</version>
-          [...]
-          <configuration>
-            [...]
-            <scanIntervalSeconds>10</scanIntervalSeconds>
-            <stopPort>8005</stopPort>
-            <stopKey>STOP</stopKey>
-            [...]
-          </configuration>
-          [...]
-          <executions>
-            [...]
-            <execution>
-              <id>start-jetty</id>
-              <phase>pre-integration-test</phase>
-              <goals>
-                <goal>start</goal>
-              </goals>
-              <configuration>
-                <scanIntervalSeconds>0</scanIntervalSeconds>
-                <daemon>true</daemon>
-              </configuration>
-            </execution>
-            <execution>
-              <id>stop-jetty</id>
-              <phase>post-integration-test</phase>
-              <goals>
-                <goal>stop</goal>
-              </goals>
-            </execution>
-            [...]
-          </executions>
-          [...]
-        </plugin>
-        [...]
-      </plugins>
-      [...]
-    </build>
-    [...]
-  </project>
-  ```
+  - 参数
 
 # install
 
