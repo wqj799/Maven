@@ -177,18 +177,18 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
   
   - 参数
     
-    | 参数名                             | 类型      | 最低版本 | 描述                                                                                                                                                                |
-    | ------------------------------- | ------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | altDeploymentRepository         | String  | -    | 指定项目工件应部署到的替代存储库（除了在 distributionManagement 中指定的存储库）。<br/>格式：`id::url`<br/>id<br/>该 ID 可用于从 settings.xml 中获取正确的凭据<br/>url<br/>存储库的位置                              |
-    | altReleaseDeploymentRepository  | String  | 2.8  | 当项目有最终版本时使用的替代存储库。                                                                                                                                                |
-    | altSnapshotDeploymentRepository | String  | 2.8  | 当项目具有快照版本时使用的替代存储库。                                                                                                                                               |
-    | deployAtEnd                     | boolean | 2.8  | 每个项目是否应该在其自己的部署阶段或多模块构建结束时进行部署。 如果设置为 true 并且构建失败，则不会部署任何项目。                                                                                                      |
-    | retryFailedDeploymentCount      | int     | 2.7  | 用于控制失败部署在放弃和失败之前重试多少次的参数。                                                                                                                                         |
-    | skip                            | String  | 2.4  | 将此设置为 'true' 以绕过工件部署。自 3.0.0-M2 以来，它不再是一个布尔值，因为它可以有两个以上的值：
-<br/>true：会像往常一样跳过
-<br/>release：如果项目的当前版本是发布，则将跳过
-<br/>snapshots：如果项目的当前版本是快照，将跳过
-<br/>任何其他值将被视为false。 |
+    | 参数名                             | 类型      | 最低版本 | 描述                                                                                                                                   |
+    | ------------------------------- | ------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------ |
+    | altDeploymentRepository         | String  | -    | 指定项目工件应部署到的替代存储库（除了在 distributionManagement 中指定的存储库）。<br/>格式：`id::url`<br/>id<br/>该 ID 可用于从 settings.xml 中获取正确的凭据<br/>url<br/>存储库的位置 |
+    | altReleaseDeploymentRepository  | String  | 2.8  | 当项目有最终版本时使用的替代存储库。                                                                                                                   |
+    | altSnapshotDeploymentRepository | String  | 2.8  | 当项目具有快照版本时使用的替代存储库。                                                                                                                  |
+    | deployAtEnd                     | boolean | 2.8  | 每个项目是否应该在其自己的部署阶段或多模块构建结束时进行部署。 如果设置为 true 并且构建失败，则不会部署任何项目。                                                                         |
+    | retryFailedDeploymentCount      | int     | 2.7  | 用于控制失败部署在放弃和失败之前重试多少次的参数。                                                                                                            |
+    | skip                            | String  | 2.4  | 将此设置为 'true' 以绕过工件部署。自 3.0.0-M2 以来，它不再是一个布尔值，因为它可以有两个以上的值：                                                                           |
+    | <br/>true：会像往常一样跳过              |         |      |                                                                                                                                      |
+    | <br/>release：如果项目的当前版本是发布，则将跳过  |         |      |                                                                                                                                      |
+    | <br/>snapshots：如果项目的当前版本是快照，将跳过 |         |      |                                                                                                                                      |
+    | <br/>任何其他值将被视为false。            |         |      |                                                                                                                                      |
 
 - deploy:deploy-file
   
@@ -226,8 +226,6 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
     | sources                    | File    | 2.6  | 工件的源代码。                                                                        |
     | types                      | String  | -    | 每个要部署的额外辅助工件的类型的逗号分隔列表。 如果文件或分类器中的条目数不匹配，则会引发错误。                               |
     | version                    | String  | -    | 要部署的工件的版本。 如果指定，则从 POM 文件中检索。                                                  |
-    
-    
 
 # failsafe
 
@@ -238,83 +236,52 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
     `org.apache.maven.plugins:maven-failsafe-plugin:3.0.0-M6:verify`
   
   - 描述
+    
+    验证使用 Surefire 运行的集成测试。
   
-  - 
+  - 必须参数
+    
+    | 参数名         | 类型   | 最低版本 | 描述                                                                                           |
+    | ----------- | ---- | ---- | -------------------------------------------------------------------------------------------- |
+    | summaryFile | File | -    | 从中读取集成测试结果的摘要文件。<br/>默认值为：`${project.build.directory}/failsafe-reports/failsafe-summary.xml` |
+    
+    
   
-  - 参数
+  - 可选参数
+    
+    | 参数名                  | 类型      | 最低版本          | 描述                                                    |
+    | -------------------- | ------- | ------------- | ----------------------------------------------------- |
+    | basedir              | File    | -             | 正在测试的项目的基本目录。                                         |
+    | failIfNoTests        | boolean | 2.4           | 将此参数设置为true，如果没有要运行的测试，将导致失败。 <br/>默认值为：false         |
+    | failOnFlakeCount     | int     | 3.0.0-M6      | 请将其设置为大于 0 的值，如果flake的累积数量达到此阈值，以使整个测试集失败。<br/>默认值为：0 |
+    | reportsDirectory     | File    | -             | 写入所有报告的基本目录。                                          |
+    | skip                 | boolean | -             | 将此设置为true以完全绕过单元测试。                                   |
+    | skipITs              | boolean | 2.4.3-alpha-2 | 将此设置为true以跳过正在运行的集成测试，但仍会编译它们。                        |
+    | skipTests            | boolean | 2.4           | 将此设置为true以跳过正在运行的测试，但仍编译它们。                           |
+    | summaryFiles         | File[]  | 2.6           | 用于读取集成测试结果的附加摘要文件。                                    |
+    | testClassesDirectory | File    | -             | 包含正在测试的项目的生成测试类的目录。 这将包含在测试类路径的开头。                    |
+    | testFailureIgnore    | boolean | -             | 将此设置为 true 以在测试期间忽略失败。                                |
 
 # install
 
-## 描述
-
-在安装阶段使用该插件将工件添加到本地存储库。
-
-## 目标
-
 - install:install
   
-  将工件安装到本地存储库。
-
-- install:install-file
+  - 版本信息
+    
+    `org.apache.maven.plugins:maven-install-plugin:3.0.0-M1:install`
   
-  将不是用Maven创建的工件及其POM安装到本地存储库中。
+  - 描述
+    
+    将项目的主要工件以及生命周期中其他插件附加的任何其他工件安装到本地存储库。
+  
+  - 参数
+    
+    | 参数名          | 类型      | 最低版本 | 描述                                                             |
+    | ------------ | ------- | ---- | -------------------------------------------------------------- |
+    | installAtEnd | boolean | 2.5  | 每个项目是否应该在其自己的安装阶段或在多模块构建结束时安装。 如果设置为 true 并且构建失败，则不会安装任何反应器项目。 |
+    | skip         | boolean | 2.4  | 将此设置为 true 以绕过工件安装。 将此用于不需要安装在本地存储库中的工件。                       |
 
-## 依赖信息
-
-```xml
-<project>
-  ...
-  <build>
-    <!-- To define the plugin version in your parent POM -->
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.0.0-M1</version>
-        </plugin>
-        ...
-      </plugins>
-    </pluginManagement>
-    <!-- To use the plugin goals in your POM or parent POM -->
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <version>3.0.0-M1</version>
-      </plugin>
-      ...
-    </plugins>
-  </build>
-  ...
-</project>
-```
-
-## 使用方法
-
-```shell
-mvn install
-```
-
-## 配置
-
-将不是由Maven构建的工件安装到本地：
-
-```shell
-mvn install:install-file -Dfile=your-artifact-1.0.jar \
-                         [-DpomFile=your-pom.xml] \
-                         [-Dsources=src.jar] \
-                         [-Djavadoc=apidocs.jar] \
-                         [-DgroupId=org.some.group] \
-                         [-DartifactId=your-artifact] \
-                         [-Dversion=1.0] \
-                         [-Dpackaging=jar] \
-                         [-Dclassifier=sources] \
-                         [-DgeneratePom=true] \
-                         [-DcreateChecksum=true]
-```
-
-# resources
+## resources
 
 ## 描述
 
