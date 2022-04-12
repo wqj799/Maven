@@ -275,64 +275,99 @@ Maven本质上是一个执行插件的框架，所有的工作都是由插件完
     | installAtEnd | boolean | 2.5  | 每个项目是否应该在其自己的安装阶段或在多模块构建结束时安装。 如果设置为 true 并且构建失败，则不会安装任何反应器项目。 |
     | skip         | boolean | 2.4  | 将此设置为 true 以绕过工件安装。 将此用于不需要安装在本地存储库中的工件。                       |
 
+- install:install-file
+  
+  - 版本信息
+    
+    `org.apache.maven.plugins:maven-install-plugin:3.0.0-M1:install-file`
+  
+  - 描述
+    
+    在本地存储库中安装文件。
+  
+  - 必须参数
+    
+    | 参数名  | 类型   | 最低版本 | 描述             |
+    | ---- | ---- | ---- | -------------- |
+    | file | File | -    | 要安装在本地存储库中的文件。 |
+  
+  - 可选参数
+    
+    | 参数名                 | 类型      | 最低版本 | 描述                                |
+    | ------------------- | ------- | ---- | --------------------------------- |
+    | artifactId          | String  | -    | 要安装的工件的artifactid。                |
+    | classifier          | String  | 2.2  | 将classifier添加到工件。                 |
+    | generatePom         | boolean | 2.1  | 如果没有通过参数 pomFile 提供，则为工件生成最小 POM。 |
+    | groupId             | String  | -    | 要安装的工件的 GroupId。                  |
+    | javadoc             | File    | 2.3  | 工件的API 文档。                        |
+    | localRepositoryPath | File    | 2.2  | 指定本地存储库目录的路径。                     |
+    | packaging           | String  | -    | 要安装的工件的包装类型。                      |
+    | pomFile             | File    | 2.1  | 与main工件一起安装的现有 POM 文件的位置。         |
+    | sources             | File    | 2.3  | 工件的源代码。                           |
+    | version             | String  | -    | 要安装的工件的版本。                        |
+
 ## resources
-
-## 描述
-
-将项目资源复制到输出目录。分为main资源和test资源。
-
-## 目标
 
 - resources:resources
   
-  将`<resources>`元素指定的main源代码的资源复制到输出目录，将不会影响测试代码的资源。
-
-- resources:copy-resources
+  - 版本信息
+    
+    `org.apache.maven.plugins:maven-resources-plugin:3.2.0:resources`
   
-  将不在maven标准资源目录中或未在buid/resources元素中声明的资源输出到目录。
-
-- resources:testResources
+  - 描述
+    
+    将主源代码的资源复制到主输出目录。 始终使用 project.build.resources 元素来指定要复制的资源。
   
-  将`<testResources>`元素指定的测试资源复制到输出目录。
-
-## 依赖信息
-
-```xml
-<project>
-  ...
-  <build>
-    <!-- To define the plugin version in your parent POM -->
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.2.0</version>
-        </plugin>
-        ...
-      </plugins>
-    </pluginManagement>
-    <!-- To use the plugin goals in your POM or parent POM -->
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.2.0</version>
-      </plugin>
-      ...
-    </plugins>
-  </build>
-  ...
-</project>
-```
-
-## 使用方法
-
-```shell
-mvn resources:resources
-```
-
-## 配置
+  - 必须参数
+    
+    | 参数名             | 类型   | 最低版本 | 描述          |
+    | --------------- | ---- | ---- | ----------- |
+    | outputDirectory | File | -    | 要复制资源到输出目录。 |
+  
+  - 可选参数
+    
+    | 参数名                       | 类型            | 最低版本  | 描述                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+    | ------------------------- | ------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | addDefaultExcludes        | boolean       | 3.0.0 | 默认情况下，.gitignore、.cvsignore 等文件被排除在外，这意味着它们不会被复制。 如果您出于特定原因需要它们，您可以通过将其设置为 false 来实现。 这意味着将复制以下所有文件。<br/>`Misc: **/*~, **/#*#, **/.#*, **/%*%, **/._*`
+<br/>`CVS: **/CVS, **/CVS/**, **/.cvsignore`
+<br/>`RCS: **/RCS, **/RCS/**`
+<br/>`SCCS: **/SCCS, **/SCCS/**`
+<br/>`VSSercer: **/vssver.scc`
+<br/>`MKS: **/project.pj`
+<br/>`SVN: **/.svn, **/.svn/**`
+<br/>`GNU: **/.arch-ids, **/.arch-ids/**`
+<br/>`Bazaar: **/.bzr, **/.bzr/**`
+<br/>`SurroundSCM: **/.MySCMServerInfo`
+<br/>`Mac: **/.DS_Store`
+<br/>`Serena Dimension: **/.metadata, **/.metadata/**`
+<br/>`Mercurial: **/.hg, **/.hg/**`
+<br/>`GIT: **/.git, **/.gitignore, **/.gitattributes, **/.git/**`
+<br/>`Bitkeeper: **/BitKeeper, **/BitKeeper/**, **/ChangeSet, **/ChangeSet/**`
+<br/>`Darcs: **/_darcs, **/_darcs/**, **/.darcsrepo, **/.darcsrepo/****/-darcs-backup*, **/.darcs-temp-mail`<br/>默认值为true。 |
+    | delimiters                | LinkedHashSet | 2.4   | 用于在资源中过滤的表达式的分隔符集。 这些分隔符以 beginToken*endToken 的形式指定。 如果没有给出 *，则假定开始和结束的分隔符相同。参考※注4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+    | encoding                  | String        | -     | 读取和写入过滤资源时使用的字符编码。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+    | escapeString              | String        | 2.3   | 不会插入以该字符串开头的表达式。 此字符串前面的任何其他内容都将不变地传递。 例如` \${foo}` 将被替换为 `${foo} `但 `\\${foo}` 将被替换为 `\\value`，如果此参数已设置为反斜杠。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+    | escapeWindowsPaths        | boolean       | 2.4   | 是否在 windows 风格的路径中转义反斜杠和冒号。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+    | fileNameFiltering         | boolean       | 3.0.0 | 支持过滤文件名文件夹等。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+    | filters                   | List          | -     | 要使用的额外过滤器属性文件列表。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+    | includeEmptyDirs          | boolean       | 2.3   | 复制资源中包含的任何空目录。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+    | mavenFilteringHints       | List          | 2.4   | 实现 MavenResourcesFiltering.filterResources() 的丛组件提示列表。 它们将在资源复制/过滤后执行。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+    | nonFilteredFileExtensions | List          | 2.3   | 不应用过滤的附加文件扩展名（已定义为：jpg、jpeg、gif、bmp、png）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+    | overwrite                 | boolean       | 2.3   | 即使目标文件较新，也要覆盖现有文件。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+    | propertiesEncoding        | String        | 3.2.0 | 读取和写入过滤属性文件时使用的字符编码。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+    | skip                      | boolean       | 3.0.0 | 如果需要，您可以跳过插件的执行。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+    | supportMultiLineFiltering | boolean       | 2.5   | 停止在行尾搜索 endToken。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+    | useBuildFilters           | boolean       | 2.4   | 如果为 false，则在此 mojo 执行中处理资源时不要使用 POM 的 build/filters 部分中指定的过滤器。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+    | useDefaultDelimiters      | boolean       | 2.4   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+    
+    **※注4**
+    
+    ```xml
+    <delimiters>
+      <delimiter>${*}</delimiter>
+      <delimiter>@</delimiter>
+    </delimiters>
+    ```
 
 # site
 
